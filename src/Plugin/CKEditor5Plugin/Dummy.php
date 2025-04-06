@@ -47,7 +47,15 @@ class Dummy extends CKEditor5PluginDefault implements CKEditor5PluginConfigurabl
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $this->configuration['classes'] = Html::getClass(trim($form_state->getValue('classes')));
+    $classes = preg_split("/[\s,]+/", trim($form_state->getValue('classes')));
+    $classesList = [];
+    foreach ($classes as $className) {
+      if (strlen($className)) {
+        $classesList[] = Html::cleanCssIdentifier($className);
+      }
+    }
+
+    $this->configuration['classes'] = implode(' ', $classesList);
   }
 
   /**

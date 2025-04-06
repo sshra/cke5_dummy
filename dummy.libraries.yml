@@ -4,7 +4,3 @@ dummy:
   dependencies:
     - core/ckeditor5
 
-admin.styles:
-  css:
-    theme:
-      css/admin-styles.css: { }

@@ -70,7 +70,7 @@ export default class DummyEditing extends Plugin {
   _defineConverters() {
     const {conversion} = this.editor;
     const textFormatSettings = this.editor.config.get('dummy');
-    const classesList = textFormatSettings.classes.split('/[\s,]+/');
+    const classesList = textFormatSettings.classes.split(/[\s,]+/);
 
     for (const className of classesList) {
 
@@ -79,9 +79,6 @@ export default class DummyEditing extends Plugin {
         view: {
           name: 'span',
           classes: [ className ],
-          attributes: {
-            ['class']: true,
-          }
         },
         converterPriority: 'highest',
         model: (viewElement, conversionApi ) => {
