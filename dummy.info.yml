@@ -1,0 +1,10 @@
+name: CKEditor 5 Dummy
+type: module
+description: This plugin supports an enlisted html classes of SPAN by model to prevent their deletion.
+core_version_requirement: ^10 || ^11
+package: CKEditor
+dependencies:
+  - drupal:ckeditor5
+ckeditor5-stylesheets:
+  - css/cke5.css
+

@@ -1,0 +1,11 @@
+
+# Plugin \Drupal\dummy\Plugin\CKEditor5Plugin\dummy
+ckeditor5.plugin.dummy_dummy:
+  type: mapping
+  label: 'Dummy settings'
+  mapping:
+    classes:
+      type: string
+      label: 'HTML classes to support'
+
+

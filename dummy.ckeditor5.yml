@@ -1,0 +1,14 @@
+dummy_dummy:
+  ckeditor5:
+    plugins:
+      - dummy.Dummy
+  drupal:
+    label: Dummy CKE5
+    # Drupal library with the plugin JS.
+    library: dummy/dummy
+    admin_library: dummy/admin.styles
+    class: Drupal\dummy\Plugin\CKEditor5Plugin\Dummy
+    elements:
+      - <span>
+      - <span class>
+

@@ -1,0 +1,10 @@
+dummy:
+  js:
+    js/build/dummy.js: { preprocess: false, minified: true }
+  dependencies:
+    - core/ckeditor5
+
+admin.styles:
+  css:
+    theme:
+      css/admin-styles.css: { }
