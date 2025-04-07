@@ -10,4 +10,10 @@ dummy_dummy:
     elements:
       - <span>
       - <span class>
+      - <div>
+      - <div class>
+      - <ol>
+      - <ol class>
+      - <ul>
+      - <ul class>
 

@@ -28,10 +28,32 @@ class Dummy extends CKEditor5PluginDefault implements CKEditor5PluginConfigurabl
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form['classes'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Classes', [], self::T_CONTEXT),
+      '#title' => $this->t('SPAN classes', [], self::T_CONTEXT),
       '#description' => $this->t('Classes for SPAN container to support as a dummy model.', [], self::T_CONTEXT),
       '#default_value' => $this->configuration['classes'],
     ];
+
+    $form['classes_div'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('DIV classes', [], self::T_CONTEXT),
+      '#description' => $this->t('Classes for DIV container to support as a dummy model.', [], self::T_CONTEXT),
+      '#default_value' => $this->configuration['classes_div'],
+    ];
+
+    $form['classes_ol'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('OL classes', [], self::T_CONTEXT),
+      '#description' => $this->t('Classes for OL container to support as a dummy model.', [], self::T_CONTEXT),
+      '#default_value' => $this->configuration['classes_ol'],
+    ];
+
+    $form['classes_ul'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('UL classes', [], self::T_CONTEXT),
+      '#description' => $this->t('Classes for UL container to support as a dummy model.', [], self::T_CONTEXT),
+      '#default_value' => $this->configuration['classes_ul'],
+    ];
+
 
     return $form;
   }
@@ -47,15 +69,19 @@ class Dummy extends CKEditor5PluginDefault implements CKEditor5PluginConfigurabl
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $classes = preg_split("/[\s,]+/", trim($form_state->getValue('classes')));
-    $classesList = [];
-    foreach ($classes as $className) {
-      if (strlen($className)) {
-        $classesList[] = Html::cleanCssIdentifier($className);
-      }
-    }
+    $fieldNames = ['classes', 'classes_div', 'classes_ol', 'classes_ul'];
 
-    $this->configuration['classes'] = implode(' ', $classesList);
+    foreach($fieldNames as $fieldName) {
+      $classes = preg_split("/[\s,]+/", trim($form_state->getValue($fieldName)));
+      $classesList = [];
+      foreach ($classes as $className) {
+        if (strlen($className)) {
+          $classesList[] = Html::cleanCssIdentifier($className);
+        }
+      }
+
+      $this->configuration[$fieldName] = implode(' ', $classesList);
+    }
   }
 
   /**
@@ -64,6 +90,9 @@ class Dummy extends CKEditor5PluginDefault implements CKEditor5PluginConfigurabl
   public function defaultConfiguration() {
     return [
       'classes' => '',
+      'classes_div' => '',
+      'classes_ol' => '',
+      'classes_ul' => '',
     ];
   }
 
@@ -71,7 +100,7 @@ class Dummy extends CKEditor5PluginDefault implements CKEditor5PluginConfigurabl
    * {@inheritdoc}
    */
   public function getElementsSubset(): array {
-    return ['<span>', '<span class>'];
+    return ['<span>', '<span class>', '<div>', '<div class>', '<ul>', '<ul class>', '<ol>', '<ol class>'];
   }
 
   /**

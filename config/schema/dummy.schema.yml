@@ -6,6 +6,16 @@ ckeditor5.plugin.dummy_dummy:
   mapping:
     classes:
       type: string
-      label: 'HTML classes to support'
+      label: 'SPAN HTML classes to support'
+    classes_div:
+      type: string
+      label: 'DIV HTML classes to support'
+    classes_ol:
+      type: string
+      label: 'OL HTML classes to support'
+    classes_ul:
+      type: string
+      label: 'UL HTML classes to support'
+
 
 
