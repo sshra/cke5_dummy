@@ -12,8 +12,6 @@ import {Plugin} from 'ckeditor5/src/core';
 /**
  * The editing feature.
  *
- * It introduces the 'dummy' element in the model.
- *
  * @extends module:core/plugin~Plugin
  */
 export default class DummyEditing extends Plugin {
@@ -23,7 +21,6 @@ export default class DummyEditing extends Plugin {
   init() {
     const editor = this.editor;
 
-    // Убедимся, что htmlSupport доступен
     const htmlSupport = editor.plugins.get('DataFilter');
     if (!htmlSupport) {
       console.warn('DataFilter plugin is not available!');
