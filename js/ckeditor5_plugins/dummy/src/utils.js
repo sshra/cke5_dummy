@@ -6,8 +6,8 @@
 export function refineStyles(stylesStr, excludeStyleList) {
   if (!excludeStyleList.length) return stylesStr;
 
-  const styleFilter = new RegExp('^\s*(' + excludeStyleList.join('|') + ')\\b');
-console.log(styleFilter);
+  const styleFilter = new RegExp('^\\s*(' + excludeStyleList.join('|') + ')\\b');
+
   return stylesStr
   .split( ';' )
   .map( s => s.trim() )
