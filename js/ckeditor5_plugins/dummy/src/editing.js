@@ -113,24 +113,24 @@ export default class DummyEditing extends Plugin {
     const textFormatSettings = this.editor.config.get('dummy');
     const classesList = textFormatSettings.classes.split(/[\s,]+/);
 
-    // Dummy. View -> Model. Classless case.
-    conversion.for('upcast').elementToElement({
-      view: {
-        name: 'span',
-        classes: false,
-      },
-      converterPriority: 'normal',
-      model: (viewElement, conversionApi ) => {
+    // // Dummy. View -> Model. Classless case.
+    // conversion.for('upcast').elementToElement({
+    //   view: {
+    //     name: 'span',
+    //     classes: false,
+    //   },
+    //   converterPriority: 'normal',
+    //   model: (viewElement, conversionApi ) => {
 
-        const attrs = {
-          modelClass: null,
-          modelStyle: viewElement.getAttribute('style') || '',
-        };
+    //     const attrs = {
+    //       modelClass: null,
+    //       modelStyle: viewElement.getAttribute('style') || '',
+    //     };
 
-        attrs.modelStyle = refineStyles(attrs.modelStyle, ['color', 'background-color']);
-        return conversionApi.writer.createElement( 'dummy', attrs );
-      },
-    });
+    //     attrs.modelStyle = refineStyles(attrs.modelStyle, ['color', 'background-color']);
+    //     return conversionApi.writer.createElement( 'dummy', attrs );
+    //   },
+    // });
 
     for (const className of classesList) {
       if (className.length == 0) continue;
