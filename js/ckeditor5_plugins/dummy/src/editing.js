@@ -117,7 +117,7 @@ export default class DummyEditing extends Plugin {
     conversion.for('upcast').elementToElement({
       view: {
         name: 'span',
-        classes: false
+        classes: false,
       },
       converterPriority: 'normal',
       model: (viewElement, conversionApi ) => {
