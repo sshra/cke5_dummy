@@ -34,7 +34,30 @@ export default class DummyEditing extends Plugin {
       this._addClassSupport('div', textFormatSettings.classes_div);
       this._addClassSupport('ol', textFormatSettings.classes_ol);
       this._addClassSupport('ul', textFormatSettings.classes_ul);
+
+      // enable all styles* for div (class is not required case)
+      htmlSupport.allowAttributes({
+        name: 'div',
+        styles: [
+          {
+            key: /^(?!\s*(color|background-color)\b).*/, // Match any style excluding color/background-color
+            value: true        // Match any value.
+          }
+        ],
+      });
+
     }
+
+    // editor.model.document.on('change:data', () => {
+    //   const { model } = editor;
+
+    //   model.change((writer) => {
+    //     const modelRoot = model.document.getRoot();
+    //     const firstElement = modelRoot.getChild(0); // ← первый элемент
+
+    //     console.log(firstElement); //
+    //   })
+    // });
 
   }
 
@@ -47,6 +70,12 @@ export default class DummyEditing extends Plugin {
     htmlSupport.allowAttributes({
       name: tag,
       classes: RegExp('^(' + classesList.join('|') + ')$'),
+      styles: [
+        {
+          key: /^(?!\s*(color|background-color)\b).*/, // Match any style excluding color/background-color
+          value: true        // Match any value.
+        }
+      ],
     });
   }
 
@@ -60,7 +89,7 @@ export default class DummyEditing extends Plugin {
 
     // dummy element.
     schema.register('dummy', {
-      allowIn: [ 'paragraph' ],
+      allowIn: [ 'paragraph', '$container', 'htmlDivParagraph' ],
       inheritAllFrom: '$inline',
       isInline: true,
       isObject: false,
@@ -100,10 +129,16 @@ export default class DummyEditing extends Plugin {
             return null;
           }
 
-          var attrs = {
+          const attrs = {
             modelClass: classes,
-            modelStyle: viewElement.getAttribute('style'),
+            modelStyle: viewElement.getAttribute('style') || '',
           };
+
+          attrs.modelStyle = attrs.modelStyle
+            .split( ';' )
+            .map( s => s.trim() )
+            .filter( s => !/^\s*(color|background-color)\b/.test( s ) )
+            .join( '; ' );
 
           return conversionApi.writer.createElement( 'dummy', attrs );
         },
