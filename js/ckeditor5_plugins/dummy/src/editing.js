@@ -8,6 +8,7 @@
  */
 
 import {Plugin} from 'ckeditor5/src/core';
+import { refineStyles } from './utils.js';
 
 /**
  * The editing feature.
@@ -112,6 +113,25 @@ export default class DummyEditing extends Plugin {
     const textFormatSettings = this.editor.config.get('dummy');
     const classesList = textFormatSettings.classes.split(/[\s,]+/);
 
+    // Dummy. View -> Model. Classless case.
+    conversion.for('upcast').elementToElement({
+      view: {
+        name: 'span',
+        classes: false
+      },
+      converterPriority: 'normal',
+      model: (viewElement, conversionApi ) => {
+
+        const attrs = {
+          modelClass: null,
+          modelStyle: viewElement.getAttribute('style') || '',
+        };
+
+        attrs.modelStyle = refineStyles(attrs.modelStyle, ['color', 'background-color']);
+        return conversionApi.writer.createElement( 'dummy', attrs );
+      },
+    });
+
     for (const className of classesList) {
       if (className.length == 0) continue;
 
@@ -134,12 +154,7 @@ export default class DummyEditing extends Plugin {
             modelStyle: viewElement.getAttribute('style') || '',
           };
 
-          attrs.modelStyle = attrs.modelStyle
-            .split( ';' )
-            .map( s => s.trim() )
-            .filter( s => !/^\s*(color|background-color)\b/.test( s ) )
-            .join( '; ' );
-
+          attrs.modelStyle = refineStyles(attrs.modelStyle, ['color', 'background-color'])
           return conversionApi.writer.createElement( 'dummy', attrs );
         },
       });
@@ -152,8 +167,9 @@ export default class DummyEditing extends Plugin {
           if (modelElement.getAttribute('modelClass')) {
             classes.push(modelElement.getAttribute('modelClass'));
           }
+
           let htmlAttrs = {
-            'class': classes.join(' '),
+            'class': classes.length ? classes.join(' ') : null,
             'style': modelElement.getAttribute('modelStyle')
           };
           return writer.createContainerElement('span', htmlAttrs );
