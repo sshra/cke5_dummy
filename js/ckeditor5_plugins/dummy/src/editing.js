@@ -8,7 +8,7 @@
  */
 
 import {Plugin} from 'ckeditor5/src/core';
-import { refineStyles } from './utils.js';
+import { refineStyles, getFirstElement } from './utils.js';
 
 /**
  * The editing feature.
@@ -24,6 +24,7 @@ export default class DummyEditing extends Plugin {
 
     this._defineSchema();
     this._defineConverters();
+    this._NBPSfix();
 
     const htmlSupport = editor.plugins.get('DataFilter');
     if (!htmlSupport) {
@@ -50,14 +51,7 @@ export default class DummyEditing extends Plugin {
     }
 
     // editor.model.document.on('change:data', () => {
-    //   const { model } = editor;
-
-    //   model.change((writer) => {
-    //     const modelRoot = model.document.getRoot();
-    //     const firstElement = modelRoot.getChild(0); // ← первый элемент
-
-    //     console.log(firstElement); //
-    //   })
+    //   console.log(getFirstElement(editor)); //
     // });
 
   }
@@ -66,8 +60,15 @@ export default class DummyEditing extends Plugin {
     const htmlSupport = this.editor.plugins.get('DataFilter');
 
     const classesList = classes.split(/[\s,]+/);
-    if (classesList[0] == '') return;
+    if (classesList.length == 1 && classesList[0] == '') return;
 
+    // just classes alone
+    htmlSupport.allowAttributes({
+      name: tag,
+      classes: RegExp('^(' + classesList.join('|') + ')$'),
+    });
+
+    // just classes + styles
     htmlSupport.allowAttributes({
       name: tag,
       classes: RegExp('^(' + classesList.join('|') + ')$'),
@@ -177,6 +178,27 @@ export default class DummyEditing extends Plugin {
       });
 
     }
+  }
+
+  _NBPSfix() {
+    const {conversion} = this.editor;
+
+    conversion.for('downcast').elementToElement({
+      model: 'htmlDivParagraph',
+      converterPriority: 'high',
+      view: (modelElement, { writer }) => {
+        let htmlAttrs = {
+          class: modelElement.getAttribute('class') || null,
+          style: modelElement.getAttribute('style') || null,
+        }
+
+        const div = writer.createContainerElement('div', htmlAttrs );
+        const text = writer.createText('');
+        writer.insert(writer.createPositionAt(div, 0), [text]);
+        return div
+      }
+    });
+
   }
 
 }

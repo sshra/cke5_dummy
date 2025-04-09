@@ -14,3 +14,9 @@ export function refineStyles(stylesStr, excludeStyleList) {
   .filter( s => !styleFilter.test( s ) )
   .join( '; ' );
 }
+
+export function getFirstElement(editor) {
+  const { model } = editor;
+  const modelRoot = model.document.getRoot();
+  return  modelRoot.getChild(0);
+}
