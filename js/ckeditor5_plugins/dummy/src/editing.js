@@ -8,7 +8,7 @@
  */
 
 import {Plugin} from 'ckeditor5/src/core';
-import { refineStyles, getFirstElement } from './utils.js';
+import { refineStyles } from './utils.js';
 
 /**
  * The editing feature.
@@ -32,7 +32,7 @@ export default class DummyEditing extends Plugin {
     } else {
       const textFormatSettings = editor.config.get('dummy');
 
-///      this._addClassSupport('span', textFormatSettings.classes);
+//      this._addClassSupport('span', textFormatSettings.classes);
       this._addClassSupport('div', textFormatSettings.classes_div);
       this._addClassSupport('ol', textFormatSettings.classes_ol);
       this._addClassSupport('ul', textFormatSettings.classes_ul);
@@ -49,11 +49,6 @@ export default class DummyEditing extends Plugin {
       });
 
     }
-
-    // editor.model.document.on('change:data', () => {
-    //   console.log(getFirstElement(editor)); //
-    // });
-
   }
 
   _addClassSupport(tag, classes) {
@@ -113,25 +108,6 @@ export default class DummyEditing extends Plugin {
     const {conversion} = this.editor;
     const textFormatSettings = this.editor.config.get('dummy');
     const classesList = textFormatSettings.classes.split(/[\s,]+/);
-
-    // // Dummy. View -> Model. Classless case.
-    // conversion.for('upcast').elementToElement({
-    //   view: {
-    //     name: 'span',
-    //     classes: false,
-    //   },
-    //   converterPriority: 'normal',
-    //   model: (viewElement, conversionApi ) => {
-
-    //     const attrs = {
-    //       modelClass: null,
-    //       modelStyle: viewElement.getAttribute('style') || '',
-    //     };
-
-    //     attrs.modelStyle = refineStyles(attrs.modelStyle, ['color', 'background-color']);
-    //     return conversionApi.writer.createElement( 'dummy', attrs );
-    //   },
-    // });
 
     for (const className of classesList) {
       if (className.length == 0) continue;
@@ -198,7 +174,6 @@ export default class DummyEditing extends Plugin {
         return div
       }
     });
-
   }
 
 }
